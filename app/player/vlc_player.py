@@ -52,3 +52,14 @@ class VLCPlayer:
 
     def get_position(self):
         return self.player.get_position()
+    def set_speed(self, speed):
+        self.player.set_rate(speed)
+
+    def get_speed(self):
+        return self.player.get_rate()
+
+    def next_frame(self):
+        self.player.next_frame()
+
+    def previous_frame(self):
+        self.player.previous_frame()
