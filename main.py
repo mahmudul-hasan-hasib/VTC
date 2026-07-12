@@ -1,5 +1,4 @@
 import sys
-
 from PyQt6.QtWidgets import QApplication
 
 from app.controller.main_window import MainWindow
@@ -7,15 +6,11 @@ from app.controller.main_window import MainWindow
 
 def main():
     app = QApplication(sys.argv)
-    app.setApplicationName("Vehicle Traffic Counter")
 
     window = MainWindow()
     window.show()
 
-    try:
-        sys.exit(app.exec())
-    except AttributeError:
-        sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":
