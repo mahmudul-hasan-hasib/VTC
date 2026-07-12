@@ -1,10 +1,22 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QLabel
 
-app = QApplication(sys.argv)
+from PyQt6.QtWidgets import QApplication
 
-label = QLabel("Vehicle Traffic Counter")
-label.resize(400, 200)
-label.show()
+from app.controller.main_window import MainWindow
 
-sys.exit(app.exec_())
+
+def main():
+    app = QApplication(sys.argv)
+    app.setApplicationName("Vehicle Traffic Counter")
+
+    window = MainWindow()
+    window.show()
+
+    try:
+        sys.exit(app.exec())
+    except AttributeError:
+        sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    main()
