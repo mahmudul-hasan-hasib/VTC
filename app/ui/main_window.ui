@@ -163,7 +163,7 @@
        <column/>
        <item row="0" column="0">
         <property name="text">
-         <string>Auto</string>
+         <string>Auto Rickshaw</string>
         </property>
         <property name="font">
          <font>
@@ -289,6 +289,11 @@
        <item row="0" column="8">
         <property name="text">
          <string>Medium Truck</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
         </property>
        </item>
        <item row="0" column="9">

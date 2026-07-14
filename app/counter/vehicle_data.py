@@ -1,0 +1,15 @@
+VEHICLE_CLASSES = [
+    "Auto Rickshaw",
+    "Bicycle",
+    "Car",
+    "Cycle Rickshaw",
+    "Large Bus",
+    "Mini Bus",
+    "Micro Bus",
+    "Heavy Truck",
+    "Medium Truck",
+    "Small Truck",
+    "Motorcycle",
+    "Utility",
+    "Caravan",
+]
