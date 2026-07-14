@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>709</width>
-    <height>654</height>
+    <width>720</width>
+    <height>673</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,10 +20,10 @@
       <x>40</x>
       <y>0</y>
       <width>590</width>
-      <height>598</height>
+      <height>638</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="VideoContainer" stretch="10,0,0,0,0,2,0">
+    <layout class="QVBoxLayout" name="VideoContainer" stretch="10,0,0,0,0,0,0,0">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -124,6 +124,9 @@
          <property name="text">
           <string>Incoming</string>
          </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -136,14 +139,222 @@
       </layout>
      </item>
      <item>
-      <widget class="QTableView" name="tableVehicle"/>
+      <widget class="QTableWidget" name="tableCounter">
+       <property name="rowCount">
+        <number>1</number>
+       </property>
+       <property name="columnCount">
+        <number>14</number>
+       </property>
+       <row/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <item row="0" column="0">
+        <property name="text">
+         <string>Auto</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+       </item>
+       <item row="0" column="1">
+        <property name="text">
+         <string>Bicycle</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="background">
+         <brush brushstyle="NoBrush">
+          <color alpha="255">
+           <red>0</red>
+           <green>0</green>
+           <blue>127</blue>
+          </color>
+         </brush>
+        </property>
+       </item>
+       <item row="0" column="2">
+        <property name="text">
+         <string>Car</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="background">
+         <brush brushstyle="NoBrush">
+          <color alpha="255">
+           <red>255</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </property>
+       </item>
+       <item row="0" column="3">
+        <property name="text">
+         <string>Cycle-Rickshaw</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="background">
+         <brush brushstyle="NoBrush">
+          <color alpha="255">
+           <red>255</red>
+           <green>0</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </property>
+       </item>
+       <item row="0" column="4">
+        <property name="text">
+         <string>Large Bus</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="background">
+         <brush brushstyle="NoBrush">
+          <color alpha="255">
+           <red>255</red>
+           <green>0</green>
+           <blue>127</blue>
+          </color>
+         </brush>
+        </property>
+       </item>
+       <item row="0" column="5">
+        <property name="text">
+         <string>Mini Bus</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="background">
+         <brush brushstyle="NoBrush">
+          <color alpha="255">
+           <red>0</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </property>
+       </item>
+       <item row="0" column="6">
+        <property name="text">
+         <string>Micro Bus</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+       </item>
+       <item row="0" column="7">
+        <property name="text">
+         <string>Heavy Truck</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+       </item>
+       <item row="0" column="8">
+        <property name="text">
+         <string>Medium Truck</string>
+        </property>
+       </item>
+       <item row="0" column="9">
+        <property name="text">
+         <string>Small Truck</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+       </item>
+       <item row="0" column="10">
+        <property name="text">
+         <string>Motor Cycle</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+       </item>
+       <item row="0" column="11">
+        <property name="text">
+         <string>Utility</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+       </item>
+       <item row="0" column="12">
+        <property name="text">
+         <string>Cart</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+       </item>
+       <item row="0" column="13">
+        <property name="text">
+         <string>Total</string>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+       </item>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnSave">
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
        <property name="text">
         <string>Save</string>
        </property>
       </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2"/>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_8"/>
@@ -156,7 +367,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>709</width>
+     <width>720</width>
      <height>33</height>
     </rect>
    </property>

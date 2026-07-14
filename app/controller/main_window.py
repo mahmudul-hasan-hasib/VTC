@@ -1,11 +1,18 @@
 from PyQt6.QtWidgets import QMainWindow, QFileDialog
-from PyQt6.QtCore import QTimer
-
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtGui import QShortcut, QKeySequence
 from app.player.vlc_player import VLCPlayer
 from app.ui.ui_mainwindow import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
+    """Main application window for Vehicle Traffic Counter.
+
+    Wraps the generated UI (`Ui_MainWindow`) and exposes playback
+    controls that use `VLCPlayer` to play video inside the UI's
+    `videoFrame` widget.
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -16,7 +23,15 @@ class MainWindow(QMainWindow):
         self.timer = QTimer(self)
         self.timer.setInterval(200)
         self.timer.timeout.connect(self.update_ui)
-
+        self.shortcut_space = QShortcut(QKeySequence("Space"), self)
+        self.shortcut_space.setContext(Qt.ShortcutContext.ApplicationShortcut)
+        self.shortcut_space.activated.connect(self.play_pause)
+        self.shortcut_right = QShortcut(QKeySequence("Right"), self)
+        self.shortcut_right.setContext(Qt.ShortcutContext.ApplicationShortcut)
+        self.shortcut_right.activated.connect(self.next_frame)
+        self.shortcut_left = QShortcut(QKeySequence("Left"), self)
+        self.shortcut_left.setContext(Qt.ShortcutContext.ApplicationShortcut)
+        self.shortcut_left.activated.connect(self.previous_frame)
         self.initialize_ui()
         self.connect_signals()
 
@@ -39,6 +54,7 @@ class MainWindow(QMainWindow):
         self.ui.actionPlay.triggered.connect(self.play_video)
         self.ui.actionPause.triggered.connect(self.pause_video)
         self.ui.actionStop.triggered.connect(self.stop_video)
+        self.ui.actionPrevious_Frame.triggered.connect(self.previous_frame)
         self.ui.btnPrevFrame.clicked.connect(self.previous_frame)
         self.ui.btnNextFrame.clicked.connect(self.next_frame)
 
@@ -89,11 +105,17 @@ class MainWindow(QMainWindow):
 
     def seek_video(self, position):
         self.player.set_time(position)
-    
-    
-    def previous_frame(self, fps=30):
-        frame_time = int(1000 / fps)
-        current= self.player.get_time()
-        self.player.set_time(max(0, current - frame_time))
 
-    
+    def previous_frame(self):
+        """Step video playback backward by one frame."""
+        self.player.previous_frame()
+
+    def next_frame(self):
+        """Step video playback forward by one frame."""
+        self.player.next_frame()
+
+    def play_pause(self):
+        if self.player.is_playing():
+            self.pause_video()
+        else:
+            self.play_video()
