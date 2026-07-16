@@ -6,393 +6,356 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>546</width>
-    <height>692</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>960</width>
+    <height>600</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Vehicle Traffic Counter</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="verticalLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>0</y>
-      <width>590</width>
-      <height>638</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="VideoContainer" stretch="10,0,0,0,0,0,0">
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QFrame" name="videoFrame">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>400</height>
-          </size>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::Shape::Box</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QSlider" name="sliderTimeline">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="btnOpen">
-         <property name="text">
-          <string>Open</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnPlay">
-         <property name="text">
-          <string>Play</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnPause">
-         <property name="text">
-          <string>Pause</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnStop">
-         <property name="text">
-          <string>Stop</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnPrevFrame">
-         <property name="text">
-          <string>&lt;&lt;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnNextFrame">
-         <property name="text">
-          <string>&gt;&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lblCurrentTime">
-         <property name="text">
-          <string>00:00</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lblDuration">
-         <property name="text">
-          <string>00:00</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_6">
-       <item>
-        <widget class="QPushButton" name="btnIncoming">
-         <property name="text">
-          <string>Incoming</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnOutgoing">
-         <property name="text">
-          <string>Outgoing</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="tableCounter">
-       <property name="rowCount">
-        <number>1</number>
-       </property>
-       <property name="columnCount">
-        <number>14</number>
-       </property>
-       <row/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <column/>
-       <item row="0" column="0">
-        <property name="text">
-         <string>Auto Rickshaw</string>
+   <layout class="QHBoxLayout" name="centralLayout" stretch="3,2">
+    <property name="spacing">8</property>
+    <item>
+     <layout class="QVBoxLayout" name="videoPanelLayout">
+      <property name="spacing">6</property>
+      <item>
+       <widget class="QFrame" name="videoFrame">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
+        <property name="minimumSize">
+         <size>
+          <width>480</width>
+          <height>300</height>
+         </size>
         </property>
-       </item>
-       <item row="0" column="1">
-        <property name="text">
-         <string>Bicycle</string>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
         </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Sunken</enum>
         </property>
-        <property name="background">
-         <brush brushstyle="NoBrush">
-          <color alpha="255">
-           <red>0</red>
-           <green>0</green>
-           <blue>127</blue>
-          </color>
-         </brush>
+        <property name="lineWidth">
+         <number>1</number>
         </property>
-       </item>
-       <item row="0" column="2">
-        <property name="text">
-         <string>Car</string>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="timelineSlider">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
+        <property name="minimum">
+         <number>0</number>
         </property>
-        <property name="background">
-         <brush brushstyle="NoBrush">
-          <color alpha="255">
-           <red>255</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
+        <property name="maximum">
+         <number>100</number>
         </property>
-       </item>
-       <item row="0" column="3">
-        <property name="text">
-         <string>Cycle-Rickshaw</string>
+        <property name="value">
+         <number>0</number>
         </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
+        <property name="tracking">
+         <bool>true</bool>
         </property>
-        <property name="background">
-         <brush brushstyle="NoBrush">
-          <color alpha="255">
-           <red>255</red>
-           <green>0</green>
-           <blue>255</blue>
-          </color>
-         </brush>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="timeLabelLayout">
+        <item>
+         <widget class="QLabel" name="lblCurrentTime">
+          <property name="text">
+           <string>00:00:00</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignLeft</set>
+          </property>
+          <property name="styleClass" stdset="0">
+           <string>time-label</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblDuration">
+          <property name="text">
+           <string>00:00:00</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignRight</set>
+          </property>
+          <property name="styleClass" stdset="0">
+           <string>time-label</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="transportLayout">
+        <property name="spacing">4</property>
+        <item>
+         <widget class="QPushButton" name="btnOpenVideo">
+          <property name="text">
+           <string>Open</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>18</width>
+            <height>18</height>
+           </size>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>70</width>
+            <height>32</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="transportSpacerLeft">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>10</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnPrevFrame">
+          <property name="text">
+           <string>&lt;&lt;</string>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>36</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>32</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnPlay">
+          <property name="text">
+           <string>&gt;</string>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>36</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>32</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnPause">
+          <property name="text">
+           <string>||</string>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>36</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>32</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnStop">
+          <property name="text">
+           <string>#</string>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>36</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>32</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnNextFrame">
+          <property name="text">
+           <string>&gt;&gt;</string>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>36</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>32</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="transportSpacerRight">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>10</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="counterPanelLayout">
+      <property name="spacing">6</property>
+      <item>
+       <widget class="QGroupBox" name="directionGroup">
+        <property name="title">
+         <string>Direction</string>
         </property>
-       </item>
-       <item row="0" column="4">
-        <property name="text">
-         <string>Large Bus</string>
+        <layout class="QHBoxLayout" name="directionLayout">
+         <property name="spacing">12</property>
+         <item>
+          <widget class="QRadioButton" name="rbIncoming">
+           <property name="text">
+            <string>Incoming</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbOutgoing">
+           <property name="text">
+            <string>Outgoing</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="tableWidget">
+        <property name="rowCount">
+         <number>2</number>
         </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
+        <property name="columnCount">
+         <number>14</number>
         </property>
-        <property name="background">
-         <brush brushstyle="NoBrush">
-          <color alpha="255">
-           <red>255</red>
-           <green>0</green>
-           <blue>127</blue>
-          </color>
-         </brush>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
         </property>
-       </item>
-       <item row="0" column="5">
-        <property name="text">
-         <string>Mini Bus</string>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
         </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
+        <property name="showGrid">
+         <bool>false</bool>
         </property>
-        <property name="background">
-         <brush brushstyle="NoBrush">
-          <color alpha="255">
-           <red>0</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
+        <property name="cornerButtonEnabled">
+         <bool>false</bool>
         </property>
-       </item>
-       <item row="0" column="6">
-        <property name="text">
-         <string>Micro Bus</string>
-        </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
-        </property>
-       </item>
-       <item row="0" column="7">
-        <property name="text">
-         <string>Heavy Truck</string>
-        </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
-        </property>
-       </item>
-       <item row="0" column="8">
-        <property name="text">
-         <string>Medium Truck</string>
-        </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
-        </property>
-       </item>
-       <item row="0" column="9">
-        <property name="text">
-         <string>Small Truck</string>
-        </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
-        </property>
-       </item>
-       <item row="0" column="10">
-        <property name="text">
-         <string>Motor Cycle</string>
-        </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
-        </property>
-       </item>
-       <item row="0" column="11">
-        <property name="text">
-         <string>Utility</string>
-        </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
-        </property>
-       </item>
-       <item row="0" column="12">
-        <property name="text">
-         <string>Cart</string>
-        </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
-        </property>
-       </item>
-       <item row="0" column="13">
-        <property name="text">
-         <string>Total</string>
-        </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_8"/>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QPushButton" name="btnSave">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>610</y>
-      <width>588</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-    <property name="text">
-     <string>Save</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnReset">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>610</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Reset</string>
-    </property>
-   </widget>
+        <row/>
+        <row/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="actionLayout">
+        <property name="spacing">6</property>
+        <item>
+         <widget class="QPushButton" name="btnSave">
+          <property name="text">
+           <string>Save Session</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnExport">
+          <property name="text">
+           <string>Export CSV</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnReset">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>546</width>
-     <height>33</height>
+     <width>1280</width>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -401,7 +364,10 @@
     </property>
     <addaction name="actionOpen_Video"/>
     <addaction name="actionOpen_Folder"/>
+    <addaction name="separator"/>
     <addaction name="actionExport_CSV"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuPlayback">
     <property name="title">
@@ -410,40 +376,60 @@
     <addaction name="actionPlay"/>
     <addaction name="actionPause"/>
     <addaction name="actionStop"/>
+    <addaction name="separator"/>
     <addaction name="actionPrevious_Frame"/>
-   </widget>
-   <widget class="QMenu" name="menuSettings">
-    <property name="title">
-     <string>Settings</string>
-    </property>
-    <addaction name="actionRuntime_Parameters"/>
+    <addaction name="actionNext_Frame"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuPlayback"/>
-   <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen_Video">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::MediaRecord"/>
+   </property>
    <property name="text">
     <string>Open Video</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionOpen_Folder">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::FolderOpen"/>
+   </property>
    <property name="text">
     <string>Open Folder</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
   </action>
   <action name="actionExport_CSV">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentSave"/>
+   </property>
    <property name="text">
     <string>Export CSV</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="actionPlay">
@@ -453,8 +439,7 @@
   </action>
   <action name="actionPause">
    <property name="text">
-    <string>Pause
-</string>
+    <string>Pause</string>
    </property>
   </action>
   <action name="actionStop">
@@ -467,9 +452,9 @@
     <string>Previous Frame</string>
    </property>
   </action>
-  <action name="actionRuntime_Parameters">
+  <action name="actionNext_Frame">
    <property name="text">
-    <string>Runtime Parameters</string>
+    <string>Next Frame</string>
    </property>
   </action>
   <action name="actionAbout">
