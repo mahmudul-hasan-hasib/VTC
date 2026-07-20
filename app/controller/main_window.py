@@ -347,9 +347,10 @@ class MainWindow(QMainWindow):
     def pause_video(self):
         if not self._video_loaded:
             return
-        self.player.pause()
-        self.timer.stop()
-        self._sync_slider()
+        if self.player.is_playing():
+            self.player.pause()
+            self.timer.stop()
+            self._sync_slider()
 
     def stop_video(self):
         if not self._video_loaded:
@@ -366,11 +367,12 @@ class MainWindow(QMainWindow):
     def toggle_play_pause(self):
         if not self._video_loaded:
             return
+        was_playing = self.player.is_playing()
         self.player.play_pause()
-        if self.player.is_playing():
-            self.timer.start()
-        else:
+        if was_playing:
             self.timer.stop()
+        else:
+            self.timer.start()
 
     def next_frame(self):
         if not self._video_loaded:

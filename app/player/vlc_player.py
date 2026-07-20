@@ -138,29 +138,25 @@ class VLCPlayer:
 
     def next_frame(self):
         state = self.player.get_state()
-        was_playing = state == vlc.State.Playing
-        if was_playing:
+        if state == vlc.State.Playing:
             self.player.pause()
-            time.sleep(0.03)
-        current_time = self.get_time()
-        step = self._frame_duration_ms()
-        new_time = min(self.get_length(), current_time + step)
-        self.player.set_time(new_time)
-        if was_playing:
-            self.player.pause()
+            time.sleep(0.05)
+        self.player.next_frame()
+        time.sleep(0.05)
 
     def previous_frame(self):
         state = self.player.get_state()
-        was_playing = state == vlc.State.Playing
-        if was_playing:
+        if state == vlc.State.Playing:
             self.player.pause()
-            time.sleep(0.03)
+            time.sleep(0.05)
         current_time = self.get_time()
         step = self._frame_duration_ms()
         new_time = max(0, current_time - step)
         self.player.set_time(new_time)
-        if was_playing:
-            self.player.pause()
+        self.player.pause()
+        time.sleep(0.02)
+        self.player.pause()
+        time.sleep(0.05)
 
     def get_volume(self):
         return self.player.audio_get_volume()
