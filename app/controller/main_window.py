@@ -300,8 +300,15 @@ class MainWindow(QMainWindow):
             self.ui.speedCombo.setCurrentIndex(DEFAULT_SPEED_INDEX)
             self.ui.speedCombo.blockSignals(False)
             self._current_speed_index = DEFAULT_SPEED_INDEX
+            self.ui.timelineSlider.blockSignals(True)
+            self.ui.timelineSlider.setRange(0, 1000)
+            self.ui.timelineSlider.setValue(0)
+            self.ui.timelineSlider.blockSignals(False)
+            self.ui.lblCurrentTime.setText("00:00:00")
+            self.ui.lblDuration.setText("00:00:00")
             self.ui.statusbar.showMessage(f"Loaded: {os.path.basename(file_path)}")
-            QTimer.singleShot(300, self._sync_initial_duration)
+            QTimer.singleShot(250, self._sync_initial_duration)
+            QTimer.singleShot(250, self._sync_slider)
         except Exception as e:
             self._video_loaded = False
             self._update_control_states()
@@ -323,11 +330,16 @@ class MainWindow(QMainWindow):
             return
         self.player.play()
         self.timer.start()
+        if self.player.get_state() != vlc.State.Playing:
+            self.player.set_time(self.player.get_time())
+        self._sync_slider()
 
     def pause_video(self):
         if not self._video_loaded:
             return
         self.player.pause()
+        self.timer.stop()
+        self._sync_slider()
 
     def stop_video(self):
         if not self._video_loaded:
@@ -335,9 +347,11 @@ class MainWindow(QMainWindow):
         self.player.stop()
         self.timer.stop()
         self.ui.timelineSlider.blockSignals(True)
+        self.ui.timelineSlider.setRange(0, 1000)
         self.ui.timelineSlider.setValue(0)
         self.ui.timelineSlider.blockSignals(False)
         self.ui.lblCurrentTime.setText("00:00:00")
+        self.ui.lblDuration.setText("00:00:00")
 
     def toggle_play_pause(self):
         if not self._video_loaded:
@@ -438,12 +452,20 @@ class MainWindow(QMainWindow):
             self.ui.timelineSlider.setMaximum(duration)
             self.ui.timelineSlider.setValue(current)
             self.ui.timelineSlider.blockSignals(False)
-            self.ui.lblCurrentTime.setText(self.format_time(current))
-            self.ui.lblDuration.setText(self.format_time(duration))
+        else:
+            self.ui.timelineSlider.blockSignals(True)
+            self.ui.timelineSlider.setRange(0, 1000)
+            self.ui.timelineSlider.setValue(current)
+            self.ui.timelineSlider.blockSignals(False)
+        self.ui.lblCurrentTime.setText(self.format_time(current))
+        self.ui.lblDuration.setText(self.format_time(duration))
 
     def _on_slider_moved(self, position):
         self.player.set_time(position)
         self.ui.lblCurrentTime.setText(self.format_time(position))
+        self.ui.timelineSlider.blockSignals(True)
+        self.ui.timelineSlider.setValue(position)
+        self.ui.timelineSlider.blockSignals(False)
 
     def _on_slider_pressed(self):
         self._slider_pressed = True
@@ -451,6 +473,7 @@ class MainWindow(QMainWindow):
     def _on_slider_released(self):
         pos = self.ui.timelineSlider.value()
         self.player.set_time(pos)
+        self._sync_slider()
         self._slider_pressed = False
 
     def format_time(self, ms):
@@ -492,15 +515,16 @@ class MainWindow(QMainWindow):
         self.update_counter_table()
 
     def reset_counter(self):
+        direction = self.counter.mode
         reply = QMessageBox.question(
             self,
             "Reset Counter",
-            "Are you sure you want to reset all counts?",
+            f"Are you sure you want to reset all {direction} counts?",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
         if reply == QMessageBox.StandardButton.Yes:
-            self.counter.reset()
+            self.counter.reset_current()
             self.update_counter_table()
 
     # ----------------------------------------------------------- save / export
@@ -548,18 +572,17 @@ class MainWindow(QMainWindow):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open(filename, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
-            header = ["Timestamp", "Direction"] + VEHICLE_CLASSES + ["Total"]
-            writer.writerow(header)
-            in_total = sum(self.counter.incoming.values())
-            in_row = [timestamp, "Incoming"] + [
-                self.counter.incoming.get(v, 0) for v in VEHICLE_CLASSES
-            ] + [in_total]
-            writer.writerow(in_row)
-            out_total = sum(self.counter.outgoing.values())
-            out_row = [timestamp, "Outgoing"] + [
-                self.counter.outgoing.get(v, 0) for v in VEHICLE_CLASSES
-            ] + [out_total]
-            writer.writerow(out_row)
+            writer.writerow(["Timestamp", "Direction", "Vehicle", "Count", "Total"])
+            for direction, counts in [
+                ("Incoming", self.counter.incoming),
+                ("Outgoing", self.counter.outgoing),
+            ]:
+                total = sum(counts.values())
+                for vehicle in VEHICLE_CLASSES:
+                    writer.writerow([
+                        timestamp, direction, vehicle,
+                        counts.get(vehicle, 0), total,
+                    ])
         QMessageBox.information(self, "Export CSV", f"Counts exported to {filename}.")
 
     # ----------------------------------------------------------- about
@@ -573,41 +596,6 @@ class MainWindow(QMainWindow):
         )
 
     # ----------------------------------------------------------- key events
-    def resolve_counter_shortcut(self, event):
-        key = event.key()
-        if key in (Qt.Key.Key_1, Qt.Key.Key_2, Qt.Key.Key_3, Qt.Key.Key_4, Qt.Key.Key_5,
-                   Qt.Key.Key_6, Qt.Key.Key_7, Qt.Key.Key_8, Qt.Key.Key_9, Qt.Key.Key_0):
-            key_text = chr(key).upper()
-        elif key in (Qt.Key.Key_Q, Qt.Key.Key_W, Qt.Key.Key_E):
-            key_text = chr(key).upper()
-        else:
-            key_text = event.text().upper()
-
-        if key_text in KEY_VEHICLE_MAP:
-            vehicle = KEY_VEHICLE_MAP[key_text]
-            delta = -1 if event.modifiers() & Qt.KeyboardModifier.ShiftModifier else 1
-            return vehicle, delta
-        return None
-
-    def _handle_counter_shortcut(self, event):
-        vehicle_delta = self.resolve_counter_shortcut(event)
-        if vehicle_delta is None:
-            return False
-        vehicle, delta = vehicle_delta
-        if delta < 0:
-            self.counter.decrement(vehicle)
-        else:
-            self.counter.increment(vehicle)
-        self.update_counter_table()
-        mode = self.counter.mode
-        counts = self.counter.get_counts()
-        op = "-1" if delta < 0 else "+1"
-        self.ui.statusbar.showMessage(
-            f"{mode}: {vehicle} {op} (Total: {sum(counts.values())})",
-            3000,
-        )
-        return True
-
     def _handle_playback_shortcut(self, event):
         key = event.key()
         modifiers = event.modifiers()
@@ -640,8 +628,27 @@ class MainWindow(QMainWindow):
             return True
         return False
 
+    def _handle_counter_key(self, event):
+        text = event.text().upper()
+        if text in KEY_VEHICLE_MAP:
+            vehicle = KEY_VEHICLE_MAP[text]
+            if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
+                self.counter.decrement(vehicle)
+            else:
+                self.counter.increment(vehicle)
+            self.update_counter_table()
+            mode = self.counter.mode
+            counts = self.counter.get_counts()
+            op = "-1" if event.modifiers() & Qt.KeyboardModifier.ShiftModifier else "+1"
+            self.ui.statusbar.showMessage(
+                f"{mode}: {vehicle} {op} (Total: {sum(counts.values())})",
+                3000,
+            )
+            return True
+        return False
+
     def keyPressEvent(self, event):
-        if self._handle_counter_shortcut(event):
+        if self._handle_counter_key(event):
             return
         if self._handle_playback_shortcut(event):
             return
@@ -649,7 +656,7 @@ class MainWindow(QMainWindow):
 
     def eventFilter(self, obj, event):
         if event.type() == event.Type.KeyPress:
-            if self._handle_counter_shortcut(event):
+            if self._handle_counter_key(event):
                 return True
             if self._handle_playback_shortcut(event):
                 return True

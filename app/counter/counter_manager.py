@@ -41,6 +41,12 @@ class CounterManager:
     def total(self):
         return sum(self.get_counts().values())
 
+    def reset_current(self):
+        counts = self.get_counts()
+        for k in counts:
+            counts[k] = 0
+        self.history = [(m, v) for m, v in self.history if m != self.mode]
+
     def reset(self):
         for k in self.incoming:
             self.incoming[k] = 0

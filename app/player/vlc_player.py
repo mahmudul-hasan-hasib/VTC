@@ -13,7 +13,12 @@ class VLCPlayer:
         self._set_video_output()
 
     def _set_video_output(self):
-        win_id = int(self.video_widget.winId())
+        try:
+            win_id = int(self.video_widget.winId())
+        except Exception:
+            return
+        if win_id == 0:
+            return
         if sys.platform.startswith("linux"):
             self.player.set_xwindow(win_id)
         elif sys.platform == "win32":
@@ -40,6 +45,7 @@ class VLCPlayer:
             time.sleep(0.01)
         self.player.set_media(media)
         self._detect_fps(media)
+        self._set_video_output()
         self._media_loaded = True
 
     def _detect_fps(self, media):
