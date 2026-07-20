@@ -1,15 +1,50 @@
 VEHICLE_CLASSES = [
     "Auto Rickshaw",
-    "Bicycle",
-    "Car",
     "Cycle Rickshaw",
-    "Large Bus",
-    "Mini Bus",
-    "Micro Bus",
-    "Heavy Truck",
-    "Medium Truck",
-    "Small Truck",
-    "Motorcycle",
+    "Motor Cycle",
+    "Car",
     "Utility",
-    "Caravan",
+    "Small Truck",
+    "Medium Truck",
+    "Heavy Truck",
+    "Micro Bus",
+    "Mini Bus",
+    "Large Bus",
+    "Bicycle",
+    "Cart",
 ]
+
+LEFT_COLUMN = [
+    "Auto Rickshaw",
+    "Cycle Rickshaw",
+    "Motor Cycle",
+    "Car",
+    "Utility",
+    "Small Truck",
+    "Medium Truck",
+]
+
+RIGHT_COLUMN = [
+    "Heavy Truck",
+    "Micro Bus",
+    "Mini Bus",
+    "Large Bus",
+    "Bicycle",
+    "Cart",
+]
+
+KEY_VEHICLE_MAP = {
+    "1": "Auto Rickshaw",
+    "2": "Cycle Rickshaw",
+    "3": "Motor Cycle",
+    "4": "Car",
+    "5": "Utility",
+    "6": "Small Truck",
+    "7": "Medium Truck",
+    "8": "Heavy Truck",
+    "9": "Micro Bus",
+    "0": "Mini Bus",
+    "Q": "Large Bus",
+    "W": "Bicycle",
+    "E": "Cart",
+}

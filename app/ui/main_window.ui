@@ -26,8 +26,8 @@
    <string>Vehicle Traffic Counter</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="centralLayout" stretch="3,2">
-    <property name="spacing">8</property>
+    <layout class="QHBoxLayout" name="centralLayout" stretch="7,3">
+     <property name="spacing">8</property>
     <item>
      <layout class="QVBoxLayout" name="videoPanelLayout">
       <property name="spacing">6</property>
@@ -41,8 +41,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>480</width>
-          <height>300</height>
+           <width>640</width>
+           <height>400</height>
          </size>
         </property>
         <property name="frameShape">
@@ -283,41 +283,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QTableWidget" name="tableWidget">
-        <property name="rowCount">
-         <number>2</number>
-        </property>
-        <property name="columnCount">
-         <number>14</number>
-        </property>
-        <property name="alternatingRowColors">
-         <bool>true</bool>
-        </property>
-        <property name="selectionMode">
-         <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
-        </property>
-        <property name="showGrid">
-         <bool>false</bool>
-        </property>
-        <property name="cornerButtonEnabled">
-         <bool>false</bool>
-        </property>
-        <row/>
-        <row/>
-        <column/>
-        <column/>
-        <column/>
-        <column/>
-        <column/>
-        <column/>
-        <column/>
-        <column/>
-        <column/>
-        <column/>
-        <column/>
-        <column/>
-        <column/>
-       </widget>
+       <widget class="QWidget" name="counterWidget"/>
       </item>
       <item>
        <layout class="QHBoxLayout" name="actionLayout">

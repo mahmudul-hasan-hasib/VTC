@@ -1,6 +1,17 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
+class ClickSlider(QtWidgets.QSlider):
+    """QSlider subclass that jumps to click position instead of stepping."""
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.MouseButton.LeftButton:
+            val = self.minimum() + (self.maximum() - self.minimum()) * event.position().x() / self.width()
+            self.setValue(int(val))
+            self.sliderMoved.emit(int(val))
+        super().mousePressEvent(event)
+
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -14,22 +25,23 @@ class Ui_MainWindow(object):
         self.centralLayout.setContentsMargins(8, 8, 8, 8)
         self.centralLayout.setObjectName("centralLayout")
 
-        # --- LEFT PANEL: Video ---
+        # --- LEFT PANEL: Video (70%) ---
         self.videoPanelLayout = QtWidgets.QVBoxLayout()
-        self.videoPanelLayout.setSpacing(6)
+        self.videoPanelLayout.setSpacing(4)
         self.videoPanelLayout.setContentsMargins(0, 0, 0, 0)
         self.videoPanelLayout.setObjectName("videoPanelLayout")
 
         self.videoFrame = QtWidgets.QFrame(parent=self.centralwidget)
-        self.videoFrame.setMinimumSize(480, 300)
+        self.videoFrame.setMinimumSize(640, 400)
         self.videoFrame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.videoFrame.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
         self.videoFrame.setObjectName("videoFrame")
-        self.videoPanelLayout.addWidget(self.videoFrame)
+        self.videoPanelLayout.addWidget(self.videoFrame, 1)
 
-        self.timelineSlider = QtWidgets.QSlider(parent=self.centralwidget)
+        self.timelineSlider = ClickSlider(parent=self.centralwidget)
         self.timelineSlider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.timelineSlider.setObjectName("timelineSlider")
+        self.timelineSlider.setEnabled(False)
         self.videoPanelLayout.addWidget(self.timelineSlider)
 
         self.timeLabelLayout = QtWidgets.QHBoxLayout()
@@ -57,8 +69,8 @@ class Ui_MainWindow(object):
         self.transportLayout.setObjectName("transportLayout")
 
         self.btnOpenVideo = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.btnOpenVideo.setText("Open")
-        self.btnOpenVideo.setMinimumSize(70, 32)
+        self.btnOpenVideo.setText("Open Video")
+        self.btnOpenVideo.setMinimumSize(90, 30)
         self.btnOpenVideo.setObjectName("btnOpenVideo")
         self.transportLayout.addWidget(self.btnOpenVideo)
 
@@ -66,47 +78,60 @@ class Ui_MainWindow(object):
         self.transportLayout.addItem(spacer_left)
 
         self.btnPrevFrame = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.btnPrevFrame.setText("|<")
-        self.btnPrevFrame.setMinimumSize(36, 32)
-        self.btnPrevFrame.setMaximumSize(40, 32)
+        self.btnPrevFrame.setText("\u25C0\u25C0")
+        self.btnPrevFrame.setMinimumSize(38, 30)
+        self.btnPrevFrame.setMaximumSize(38, 30)
         self.btnPrevFrame.setObjectName("btnPrevFrame")
         self.transportLayout.addWidget(self.btnPrevFrame)
 
         self.btnPlay = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.btnPlay.setText(">")
-        self.btnPlay.setMinimumSize(36, 32)
-        self.btnPlay.setMaximumSize(40, 32)
+        self.btnPlay.setText("\u25B6")
+        self.btnPlay.setMinimumSize(38, 30)
+        self.btnPlay.setMaximumSize(38, 30)
         self.btnPlay.setObjectName("btnPlay")
         self.transportLayout.addWidget(self.btnPlay)
 
         self.btnPause = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.btnPause.setText("||")
-        self.btnPause.setMinimumSize(36, 32)
-        self.btnPause.setMaximumSize(40, 32)
+        self.btnPause.setText("\u23F8")
+        self.btnPause.setMinimumSize(38, 30)
+        self.btnPause.setMaximumSize(38, 30)
         self.btnPause.setObjectName("btnPause")
         self.transportLayout.addWidget(self.btnPause)
 
         self.btnStop = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.btnStop.setText("#")
-        self.btnStop.setMinimumSize(36, 32)
-        self.btnStop.setMaximumSize(40, 32)
+        self.btnStop.setText("\u25A0")
+        self.btnStop.setMinimumSize(38, 30)
+        self.btnStop.setMaximumSize(38, 30)
         self.btnStop.setObjectName("btnStop")
         self.transportLayout.addWidget(self.btnStop)
 
         self.btnNextFrame = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.btnNextFrame.setText(">|")
-        self.btnNextFrame.setMinimumSize(36, 32)
-        self.btnNextFrame.setMaximumSize(40, 32)
+        self.btnNextFrame.setText("\u25B6\u25B6")
+        self.btnNextFrame.setMinimumSize(38, 30)
+        self.btnNextFrame.setMaximumSize(38, 30)
         self.btnNextFrame.setObjectName("btnNextFrame")
         self.transportLayout.addWidget(self.btnNextFrame)
+
+        spacer_mid = QtWidgets.QSpacerItem(12, 20, QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.transportLayout.addItem(spacer_mid)
+
+        self.lblSpeed = QtWidgets.QLabel(parent=self.centralwidget)
+        self.lblSpeed.setText("Speed:")
+        self.lblSpeed.setObjectName("lblSpeed")
+        self.transportLayout.addWidget(self.lblSpeed)
+
+        self.speedCombo = QtWidgets.QComboBox(parent=self.centralwidget)
+        self.speedCombo.setObjectName("speedCombo")
+        self.speedCombo.setMinimumSize(65, 28)
+        self.transportLayout.addWidget(self.speedCombo)
 
         spacer_right = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
         self.transportLayout.addItem(spacer_right)
         self.videoPanelLayout.addLayout(self.transportLayout)
 
-        self.centralLayout.addLayout(self.videoPanelLayout, 3)
+        self.centralLayout.addLayout(self.videoPanelLayout, 7)
 
-        # --- RIGHT PANEL: Counter ---
+        # --- RIGHT PANEL: Counter (30%) ---
         self.counterPanelLayout = QtWidgets.QVBoxLayout()
         self.counterPanelLayout.setSpacing(6)
         self.counterPanelLayout.setContentsMargins(0, 0, 0, 0)
@@ -132,15 +157,14 @@ class Ui_MainWindow(object):
         self.directionLayout.addWidget(self.rbOutgoing)
         self.counterPanelLayout.addWidget(self.directionGroup)
 
-        self.tableWidget = QtWidgets.QTableWidget(parent=self.centralwidget)
-        self.tableWidget.setRowCount(2)
-        self.tableWidget.setColumnCount(14)
-        self.tableWidget.setAlternatingRowColors(True)
-        self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.NoSelection)
-        self.tableWidget.setShowGrid(False)
-        self.tableWidget.setCornerButtonEnabled(False)
-        self.tableWidget.setObjectName("tableWidget")
-        self.counterPanelLayout.addWidget(self.tableWidget)
+        self.counterScrollArea = QtWidgets.QScrollArea(parent=self.centralwidget)
+        self.counterScrollArea.setWidgetResizable(True)
+        self.counterScrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.counterScrollArea.setObjectName("counterScrollArea")
+        self.counterWidget = QtWidgets.QWidget()
+        self.counterWidget.setObjectName("counterWidget")
+        self.counterScrollArea.setWidget(self.counterWidget)
+        self.counterPanelLayout.addWidget(self.counterScrollArea, 1)
 
         self.actionLayout = QtWidgets.QHBoxLayout()
         self.actionLayout.setSpacing(6)
@@ -163,7 +187,7 @@ class Ui_MainWindow(object):
         self.actionLayout.addWidget(self.btnReset)
         self.counterPanelLayout.addLayout(self.actionLayout)
 
-        self.centralLayout.addLayout(self.counterPanelLayout, 2)
+        self.centralLayout.addLayout(self.counterPanelLayout, 3)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -214,6 +238,7 @@ class Ui_MainWindow(object):
 
         self.actionPlay = QtGui.QAction(parent=MainWindow)
         self.actionPlay.setText("Play")
+        self.actionPlay.setShortcut("Space")
         self.actionPlay.setObjectName("actionPlay")
 
         self.actionPause = QtGui.QAction(parent=MainWindow)
@@ -226,10 +251,12 @@ class Ui_MainWindow(object):
 
         self.actionPrevious_Frame = QtGui.QAction(parent=MainWindow)
         self.actionPrevious_Frame.setText("Previous Frame")
+        self.actionPrevious_Frame.setShortcut("Left")
         self.actionPrevious_Frame.setObjectName("actionPrevious_Frame")
 
         self.actionNext_Frame = QtGui.QAction(parent=MainWindow)
         self.actionNext_Frame.setText("Next Frame")
+        self.actionNext_Frame.setShortcut("Right")
         self.actionNext_Frame.setObjectName("actionNext_Frame")
 
         self.actionAbout = QtGui.QAction(parent=MainWindow)
