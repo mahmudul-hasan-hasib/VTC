@@ -26,7 +26,7 @@ BADGE_HTML = (
     'border-radius:3px;padding:1px 5px;font-size:10px;">{}</span>'
     '&nbsp;&nbsp;{}'
 )
-SPEEDS = [0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 3.00, 4.00, 5.00, 6.00]
+SPEEDS = [0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 3.00, 4.00, 5.00, 6.00,7.00,8.00,9.00,10.00]
 SPEED_LABELS = [f"{s:.2f}x" for s in SPEEDS]
 DEFAULT_SPEED_INDEX = 3
 
