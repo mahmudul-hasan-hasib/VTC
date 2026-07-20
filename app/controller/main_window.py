@@ -20,6 +20,12 @@ from app.models.session import CountingSession
 from app.services.excel_export import ExcelExporter
 from app.services.session_service import SessionService
 
+VEHICLE_KEY_MAP = {v: k for k, v in KEY_VEHICLE_MAP.items()}
+BADGE_HTML = (
+    '<span style="background-color:#0f3460;color:#ffffff;font-weight:bold;'
+    'border-radius:3px;padding:1px 5px;font-size:10px;">{}</span>'
+    '&nbsp;&nbsp;{}'
+)
 SPEEDS = [0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 3.00, 4.00, 5.00, 6.00]
 SPEED_LABELS = [f"{s:.2f}x" for s in SPEEDS]
 DEFAULT_SPEED_INDEX = 3
@@ -122,7 +128,9 @@ class MainWindow(QMainWindow):
 
             if i < len(LEFT_COLUMN):
                 vehicle = LEFT_COLUMN[i]
-                name_lbl = QLabel(vehicle)
+                key = VEHICLE_KEY_MAP.get(vehicle, "")
+                name_lbl = QLabel(BADGE_HTML.format(key, vehicle))
+                name_lbl.setTextFormat(Qt.TextFormat.RichText)
                 name_lbl.setObjectName("vehicleNameLabel")
                 count_lbl = QLabel("0")
                 count_lbl.setObjectName("vehicleCountLabel")
@@ -138,7 +146,9 @@ class MainWindow(QMainWindow):
 
             if i < len(RIGHT_COLUMN):
                 vehicle = RIGHT_COLUMN[i]
-                name_lbl = QLabel(vehicle)
+                key = VEHICLE_KEY_MAP.get(vehicle, "")
+                name_lbl = QLabel(BADGE_HTML.format(key, vehicle))
+                name_lbl.setTextFormat(Qt.TextFormat.RichText)
                 name_lbl.setObjectName("vehicleNameLabel")
                 count_lbl = QLabel("0")
                 count_lbl.setObjectName("vehicleCountLabel")
