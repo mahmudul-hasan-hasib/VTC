@@ -171,20 +171,16 @@ class Ui_MainWindow(object):
         self.actionLayout.setContentsMargins(0, 0, 0, 0)
         self.actionLayout.setObjectName("actionLayout")
 
-        self.btnSave = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.btnSave.setText("Save Session")
-        self.btnSave.setObjectName("btnSave")
-        self.actionLayout.addWidget(self.btnSave)
-
-        self.btnExport = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.btnExport.setText("Export CSV")
-        self.btnExport.setObjectName("btnExport")
-        self.actionLayout.addWidget(self.btnExport)
-
         self.btnReset = QtWidgets.QPushButton(parent=self.centralwidget)
         self.btnReset.setText("Reset")
         self.btnReset.setObjectName("btnReset")
         self.actionLayout.addWidget(self.btnReset)
+
+        self.btnExportReport = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.btnExportReport.setText("Export Excel Report")
+        self.btnExportReport.setObjectName("btnExportReport")
+        self.actionLayout.addWidget(self.btnExportReport)
+
         self.counterPanelLayout.addLayout(self.actionLayout)
 
         self.centralLayout.addLayout(self.counterPanelLayout, 3)
@@ -226,10 +222,10 @@ class Ui_MainWindow(object):
         self.actionOpen_Folder.setShortcut("Ctrl+F")
         self.actionOpen_Folder.setObjectName("actionOpen_Folder")
 
-        self.actionExport_CSV = QtGui.QAction(parent=MainWindow)
-        self.actionExport_CSV.setText("Export CSV")
-        self.actionExport_CSV.setShortcut("Ctrl+E")
-        self.actionExport_CSV.setObjectName("actionExport_CSV")
+        self.actionExport_Report = QtGui.QAction(parent=MainWindow)
+        self.actionExport_Report.setText("Export Excel Report")
+        self.actionExport_Report.setShortcut("Ctrl+R")
+        self.actionExport_Report.setObjectName("actionExport_Report")
 
         self.actionExit = QtGui.QAction(parent=MainWindow)
         self.actionExit.setText("Exit")
@@ -262,10 +258,14 @@ class Ui_MainWindow(object):
         self.actionAbout.setText("About")
         self.actionAbout.setObjectName("actionAbout")
 
+        self.actionKeyboard_Shortcuts = QtGui.QAction(parent=MainWindow)
+        self.actionKeyboard_Shortcuts.setText("Keyboard Shortcuts")
+        self.actionKeyboard_Shortcuts.setObjectName("actionKeyboard_Shortcuts")
+
         self.menuFile.addAction(self.actionOpen_Video)
         self.menuFile.addAction(self.actionOpen_Folder)
         self.menuFile.addSeparator()
-        self.menuFile.addAction(self.actionExport_CSV)
+        self.menuFile.addAction(self.actionExport_Report)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
 
@@ -276,4 +276,5 @@ class Ui_MainWindow(object):
         self.menuPlayback.addAction(self.actionPrevious_Frame)
         self.menuPlayback.addAction(self.actionNext_Frame)
 
+        self.menuHelp.addAction(self.actionKeyboard_Shortcuts)
         self.menuHelp.addAction(self.actionAbout)

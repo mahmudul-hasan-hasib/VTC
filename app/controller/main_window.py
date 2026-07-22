@@ -1,4 +1,3 @@
-import csv
 import os
 from datetime import datetime
 
@@ -15,18 +14,13 @@ from app.ui.ui_mainwindow import Ui_MainWindow
 from app.counter.counter_manager import CounterManager
 from app.counter.counter_widget import CounterWidget
 from app.counter.vehicle_data import (
-    VEHICLE_CLASSES, LEFT_COLUMN, RIGHT_COLUMN, KEY_VEHICLE_MAP,
+    VEHICLE_CLASSES, KEY_VEHICLE_MAP,
 )
 from app.models.session import CountingSession
-from app.services.excel_export import ExcelExporter
+from app.services.traffic_report_export import TrafficReportExporter
 from app.services.session_service import SessionService
 
 VEHICLE_KEY_MAP = {v: k for k, v in KEY_VEHICLE_MAP.items()}
-BADGE_HTML = (
-    '<span style="background-color:#0f3460;color:#ffffff;font-weight:bold;'
-    'border-radius:3px;padding:1px 5px;font-size:10px;">{}</span>'
-    '&nbsp;&nbsp;{}'
-)
 SPEEDS = [0.25, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00, 3.00, 4.00, 5.00, 6.00,7.00,8.00,9.00,10.00]
 SPEED_LABELS = [f"{s:.2f}x" for s in SPEEDS]
 DEFAULT_SPEED_INDEX = 3
@@ -96,91 +90,69 @@ class MainWindow(QMainWindow):
         layout.setContentsMargins(8, 8, 8, 8)
         layout.setSpacing(0)
 
-        h_left_name = QLabel("Vehicle")
-        h_left_name.setObjectName("counterHeaderLabel")
-        h_left_count = QLabel("Count")
-        h_left_count.setObjectName("counterHeaderLabel")
-        h_left_count.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
-        )
-        h_right_name = QLabel("Vehicle")
-        h_right_name.setObjectName("counterHeaderLabel")
-        h_right_count = QLabel("Count")
-        h_right_count.setObjectName("counterHeaderLabel")
-        h_right_count.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
-        )
+        h_key = QLabel("Key")
+        h_key.setObjectName("counterHeaderLabel")
+        h_key.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        h_name = QLabel("Vehicle")
+        h_name.setObjectName("counterHeaderLabel")
+        h_count = QLabel("Count")
+        h_count.setObjectName("counterHeaderLabel")
+        h_count.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        layout.addWidget(h_left_name, 0, 0)
-        layout.addWidget(h_left_count, 0, 1)
-        layout.addWidget(h_right_name, 0, 2)
-        layout.addWidget(h_right_count, 0, 3)
+        layout.addWidget(h_key, 0, 0)
+        layout.addWidget(h_name, 0, 1)
+        layout.addWidget(h_count, 0, 2)
 
         sep_top = QWidget()
         sep_top.setObjectName("counterSeparator")
         sep_top.setFixedHeight(1)
-        layout.addWidget(sep_top, 1, 0, 1, 4)
+        layout.addWidget(sep_top, 1, 0, 1, 3)
 
         self._counter_widgets = {}
-        max_rows = max(len(LEFT_COLUMN), len(RIGHT_COLUMN))
 
-        for i in range(max_rows):
-            grid_row = i + 2
+        for i, vehicle in enumerate(VEHICLE_CLASSES):
+            row = i + 2
+            key = VEHICLE_KEY_MAP.get(vehicle, "")
 
-            if i < len(LEFT_COLUMN):
-                vehicle = LEFT_COLUMN[i]
-                key = VEHICLE_KEY_MAP.get(vehicle, "")
-                name_lbl = QLabel(BADGE_HTML.format(key, vehicle))
-                name_lbl.setTextFormat(Qt.TextFormat.RichText)
-                name_lbl.setObjectName("vehicleNameLabel")
-                counter_w = CounterWidget()
-                if grid_row % 2 == 0:
-                    name_lbl.setProperty("altRow", True)
-                    counter_w.setProperty("altRow", True)
-                layout.addWidget(name_lbl, grid_row, 0)
-                layout.addWidget(counter_w, grid_row, 1)
-                self._counter_widgets[vehicle] = counter_w
-                counter_w.valueChanged.connect(
-                    lambda val, v=vehicle: self._on_counter_value_changed(v, val)
-                )
+            badge = QLabel(f"[{key}]")
+            badge.setObjectName("counterBadge")
+            badge.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-            if i < len(RIGHT_COLUMN):
-                vehicle = RIGHT_COLUMN[i]
-                key = VEHICLE_KEY_MAP.get(vehicle, "")
-                name_lbl = QLabel(BADGE_HTML.format(key, vehicle))
-                name_lbl.setTextFormat(Qt.TextFormat.RichText)
-                name_lbl.setObjectName("vehicleNameLabel")
-                counter_w = CounterWidget()
-                if grid_row % 2 == 0:
-                    name_lbl.setProperty("altRow", True)
-                    counter_w.setProperty("altRow", True)
-                layout.addWidget(name_lbl, grid_row, 2)
-                layout.addWidget(counter_w, grid_row, 3)
-                self._counter_widgets[vehicle] = counter_w
-                counter_w.valueChanged.connect(
-                    lambda val, v=vehicle: self._on_counter_value_changed(v, val)
-                )
+            name_lbl = QLabel(vehicle)
+            name_lbl.setObjectName("vehicleNameLabel")
+
+            counter_w = CounterWidget()
+            if row % 2 == 0:
+                badge.setProperty("altRow", True)
+                name_lbl.setProperty("altRow", True)
+                counter_w.setProperty("altRow", True)
+
+            layout.addWidget(badge, row, 0)
+            layout.addWidget(name_lbl, row, 1)
+            layout.addWidget(counter_w, row, 2)
+
+            self._counter_widgets[vehicle] = counter_w
+            counter_w.valueChanged.connect(
+                lambda val, v=vehicle: self._on_counter_value_changed(v, val)
+            )
 
         sep_bot = QWidget()
         sep_bot.setObjectName("counterSeparator")
         sep_bot.setFixedHeight(1)
-        layout.addWidget(sep_bot, max_rows + 2, 0, 1, 4)
+        layout.addWidget(sep_bot, len(VEHICLE_CLASSES) + 2, 0, 1, 3)
 
         total_name = QLabel("Total")
         total_name.setObjectName("totalLabel")
         self._total_label = QLabel("0")
         self._total_label.setObjectName("totalCountLabel")
-        self._total_label.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
-        )
+        self._total_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        layout.addWidget(total_name, max_rows + 3, 0, 1, 2)
-        layout.addWidget(self._total_label, max_rows + 3, 2, 1, 2)
+        layout.addWidget(total_name, len(VEHICLE_CLASSES) + 3, 0, 1, 2)
+        layout.addWidget(self._total_label, len(VEHICLE_CLASSES) + 3, 2)
 
-        layout.setColumnStretch(0, 3)
+        layout.setColumnStretch(0, 0)
         layout.setColumnStretch(1, 1)
-        layout.setColumnStretch(2, 3)
-        layout.setColumnStretch(3, 1)
+        layout.setColumnStretch(2, 0)
 
     def update_counter_table(self):
         counts = self.counter.get_counts()
@@ -217,7 +189,7 @@ class MainWindow(QMainWindow):
 
         self.ui.actionOpen_Video.triggered.connect(self.open_video)
         self.ui.actionOpen_Folder.triggered.connect(self.open_folder)
-        self.ui.actionExport_CSV.triggered.connect(self.export_csv)
+        self.ui.actionExport_Report.triggered.connect(self.export_excel_report)
         self.ui.actionExit.triggered.connect(self.close)
         self.ui.actionPlay.triggered.connect(self.toggle_play_pause)
         self.ui.actionPause.triggered.connect(self.pause_video)
@@ -225,9 +197,11 @@ class MainWindow(QMainWindow):
         self.ui.actionPrevious_Frame.triggered.connect(self.previous_frame)
         self.ui.actionNext_Frame.triggered.connect(self.next_frame)
         self.ui.actionAbout.triggered.connect(self.show_about)
+        self.ui.actionKeyboard_Shortcuts.triggered.connect(
+            self.show_keyboard_shortcuts
+        )
 
-        self.ui.btnSave.clicked.connect(self.save_session)
-        self.ui.btnExport.clicked.connect(self.export_counts)
+        self.ui.btnExportReport.clicked.connect(self.export_excel_report)
         self.ui.btnReset.clicked.connect(self.reset_counter)
         self.ui.rbIncoming.toggled.connect(self.on_direction_changed)
         self.ui.rbOutgoing.toggled.connect(self.on_direction_changed)
@@ -571,40 +545,37 @@ class MainWindow(QMainWindow):
         SessionService.save(session, filename)
         QMessageBox.information(self, "Save Session", f"Session saved to {filename}.")
 
-    def export_counts(self):
+    def export_excel_report(self):
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        default_name = f"Traffic_Survey_Report_{timestamp}.xlsx"
         filename, _ = QFileDialog.getSaveFileName(
-            self, "Export Counts", "", "Excel Files (*.xlsx)"
+            self, "Export Excel Report", default_name, "Excel Files (*.xlsx)"
         )
         if not filename:
             return
         if not filename.lower().endswith(".xlsx"):
             filename += ".xlsx"
-        ExcelExporter.export(self.counter, filename)
-        QMessageBox.information(self, "Export", f"Counts exported to {filename}.")
-
-    def export_csv(self):
-        filename, _ = QFileDialog.getSaveFileName(
-            self, "Export CSV", "", "CSV Files (*.csv)"
-        )
-        if not filename:
-            return
-        if not filename.lower().endswith(".csv"):
-            filename += ".csv"
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        with open(filename, "w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerow(["Timestamp", "Direction", "Vehicle", "Count", "Total"])
-            for direction, counts in [
-                ("Incoming", self.counter.incoming),
-                ("Outgoing", self.counter.outgoing),
-            ]:
-                total = sum(counts.values())
-                for vehicle in VEHICLE_CLASSES:
-                    writer.writerow([
-                        timestamp, direction, vehicle,
-                        counts.get(vehicle, 0), total,
-                    ])
-        QMessageBox.information(self, "Export CSV", f"Counts exported to {filename}.")
+        if os.path.exists(filename):
+            reply = QMessageBox.question(
+                self,
+                "Export Excel Report",
+                f"{os.path.basename(filename)} already exists. Overwrite?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
+            if reply != QMessageBox.StandardButton.Yes:
+                return
+        try:
+            TrafficReportExporter.export(self.counter, filename)
+            QMessageBox.information(
+                self, "Export Excel Report",
+                f"Report exported to {filename}.",
+            )
+        except Exception as e:
+            QMessageBox.critical(
+                self, "Export Error",
+                f"Could not export report:\n{e}",
+            )
 
     # ----------------------------------------------------------- about
     def show_about(self):
@@ -615,6 +586,21 @@ class MainWindow(QMainWindow):
             "A desktop application for manual vehicle traffic counting for Regnum IT.\n\n"
             "Powered by VLC and PyQt6.\n\n"
             "Developed by Python team at Regnum IT.",
+        )
+
+    def show_keyboard_shortcuts(self):
+        lines = ["<b>Increase</b><br>"]
+        for vehicle in VEHICLE_CLASSES:
+            key = VEHICLE_KEY_MAP.get(vehicle, "")
+            lines.append(f"&nbsp;&nbsp;{key}&nbsp;&nbsp;{vehicle}<br>")
+        lines.append("<br><b>Decrease</b><br>")
+        lines.append("&nbsp;&nbsp;Shift + Same Key<br><br>")
+        lines.append("<b>Examples</b><br>")
+        lines.append("&nbsp;&nbsp;Shift+1 &rarr; Auto Rickshaw -1<br>")
+        lines.append("&nbsp;&nbsp;Shift+4 &rarr; Car -1<br>")
+        lines.append("&nbsp;&nbsp;Shift+W &rarr; Bicycle -1<br>")
+        QMessageBox.information(
+            self, "Keyboard Shortcuts", "".join(lines)
         )
 
     # ----------------------------------------------------------- key events
