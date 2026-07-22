@@ -210,7 +210,7 @@ class MainWindow(QMainWindow):
         self.ui.actionOpen_Folder.triggered.connect(self.open_folder)
         self.ui.actionExport_CSV.triggered.connect(self.export_csv)
         self.ui.actionExit.triggered.connect(self.close)
-        self.ui.actionPlay.triggered.connect(self.play_video)
+        self.ui.actionPlay.triggered.connect(self.toggle_play_pause)
         self.ui.actionPause.triggered.connect(self.pause_video)
         self.ui.actionStop.triggered.connect(self.stop_video)
         self.ui.actionPrevious_Frame.triggered.connect(self.previous_frame)

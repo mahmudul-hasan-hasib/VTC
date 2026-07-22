@@ -238,7 +238,6 @@ class Ui_MainWindow(object):
 
         self.actionPlay = QtGui.QAction(parent=MainWindow)
         self.actionPlay.setText("Play")
-        self.actionPlay.setShortcut("Space")
         self.actionPlay.setObjectName("actionPlay")
 
         self.actionPause = QtGui.QAction(parent=MainWindow)
