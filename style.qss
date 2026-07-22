@@ -347,6 +347,54 @@ QRadioButton::indicator:hover {
     background-color: #0f3460;
 }
 
+/* ---- Counter Widget (- / value / +) ---- */
+#counterBtnMinus, #counterBtnPlus {
+    background-color: #1F2945;
+    color: #ffffff;
+    border: 1px solid #2E6BFF;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#counterBtnMinus:hover, #counterBtnPlus:hover {
+    background-color: #2E6BFF;
+    border-color: #2E6BFF;
+    color: #ffffff;
+}
+
+#counterBtnMinus:pressed, #counterBtnPlus:pressed {
+    background-color: #1a4ecc;
+}
+
+#counterBtnMinus:disabled {
+    background-color: #1a2035;
+    color: #555555;
+    border: 1px solid #2a3555;
+}
+
+#counterSpinBox {
+    background-color: #1F2945;
+    color: #ffffff;
+    border: 1px solid #2E6BFF;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 18px;
+    font-family: "Consolas", "Courier New", monospace;
+    padding: 2px 6px;
+    min-height: 34px;
+}
+
+#counterSpinBox:focus {
+    border: 2px solid #2E6BFF;
+    background-color: #232f52;
+}
+
+#counterWidget CounterWidget[altRow="true"] {
+    background-color: #1a2540;
+    border-radius: 6px;
+}
+
 /* ---- Scroll Area ---- */
 #counterScrollArea {
     background-color: transparent;

@@ -5,7 +5,7 @@ from datetime import datetime
 import vlc
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QFileDialog, QMessageBox,
-    QGridLayout, QLabel, QWidget,
+    QGridLayout, QLabel, QWidget, QLineEdit, QSpinBox, QComboBox,
 )
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QShortcut, QKeySequence
@@ -13,6 +13,7 @@ from PyQt6.QtGui import QShortcut, QKeySequence
 from app.player.vlc_player import VLCPlayer
 from app.ui.ui_mainwindow import Ui_MainWindow
 from app.counter.counter_manager import CounterManager
+from app.counter.counter_widget import CounterWidget
 from app.counter.vehicle_data import (
     VEHICLE_CLASSES, LEFT_COLUMN, RIGHT_COLUMN, KEY_VEHICLE_MAP,
 )
@@ -120,7 +121,7 @@ class MainWindow(QMainWindow):
         sep_top.setFixedHeight(1)
         layout.addWidget(sep_top, 1, 0, 1, 4)
 
-        self._count_labels = {}
+        self._counter_widgets = {}
         max_rows = max(len(LEFT_COLUMN), len(RIGHT_COLUMN))
 
         for i in range(max_rows):
@@ -132,17 +133,16 @@ class MainWindow(QMainWindow):
                 name_lbl = QLabel(BADGE_HTML.format(key, vehicle))
                 name_lbl.setTextFormat(Qt.TextFormat.RichText)
                 name_lbl.setObjectName("vehicleNameLabel")
-                count_lbl = QLabel("0")
-                count_lbl.setObjectName("vehicleCountLabel")
-                count_lbl.setAlignment(
-                    Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
-                )
+                counter_w = CounterWidget()
                 if grid_row % 2 == 0:
                     name_lbl.setProperty("altRow", True)
-                    count_lbl.setProperty("altRow", True)
+                    counter_w.setProperty("altRow", True)
                 layout.addWidget(name_lbl, grid_row, 0)
-                layout.addWidget(count_lbl, grid_row, 1)
-                self._count_labels[vehicle] = count_lbl
+                layout.addWidget(counter_w, grid_row, 1)
+                self._counter_widgets[vehicle] = counter_w
+                counter_w.valueChanged.connect(
+                    lambda val, v=vehicle: self._on_counter_value_changed(v, val)
+                )
 
             if i < len(RIGHT_COLUMN):
                 vehicle = RIGHT_COLUMN[i]
@@ -150,17 +150,16 @@ class MainWindow(QMainWindow):
                 name_lbl = QLabel(BADGE_HTML.format(key, vehicle))
                 name_lbl.setTextFormat(Qt.TextFormat.RichText)
                 name_lbl.setObjectName("vehicleNameLabel")
-                count_lbl = QLabel("0")
-                count_lbl.setObjectName("vehicleCountLabel")
-                count_lbl.setAlignment(
-                    Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
-                )
+                counter_w = CounterWidget()
                 if grid_row % 2 == 0:
                     name_lbl.setProperty("altRow", True)
-                    count_lbl.setProperty("altRow", True)
+                    counter_w.setProperty("altRow", True)
                 layout.addWidget(name_lbl, grid_row, 2)
-                layout.addWidget(count_lbl, grid_row, 3)
-                self._count_labels[vehicle] = count_lbl
+                layout.addWidget(counter_w, grid_row, 3)
+                self._counter_widgets[vehicle] = counter_w
+                counter_w.valueChanged.connect(
+                    lambda val, v=vehicle: self._on_counter_value_changed(v, val)
+                )
 
         sep_bot = QWidget()
         sep_bot.setObjectName("counterSeparator")
@@ -186,11 +185,21 @@ class MainWindow(QMainWindow):
     def update_counter_table(self):
         counts = self.counter.get_counts()
         total = 0
-        for vehicle, label in self._count_labels.items():
+        for vehicle, cw in self._counter_widgets.items():
             count = counts.get(vehicle, 0)
-            label.setText(str(count))
+            cw.setValue(count)
             total += count
         self._total_label.setText(str(total))
+
+    def _on_counter_value_changed(self, vehicle, val):
+        self.counter.set_count(vehicle, val)
+        total = sum(cw.value() for cw in self._counter_widgets.values())
+        self._total_label.setText(str(total))
+
+    def _load_session_data(self, incoming, outgoing):
+        self.counter.incoming = incoming
+        self.counter.outgoing = outgoing
+        self.update_counter_table()
 
     # --------------------------------------------------------- signal wiring
     def connect_signals(self):
@@ -642,6 +651,9 @@ class MainWindow(QMainWindow):
         return False
 
     def _handle_counter_key(self, event):
+        focused = QApplication.focusWidget()
+        if isinstance(focused, (QLineEdit, QSpinBox, QComboBox)):
+            return False
         text = event.text().upper()
         if text in KEY_VEHICLE_MAP:
             vehicle = KEY_VEHICLE_MAP[text]

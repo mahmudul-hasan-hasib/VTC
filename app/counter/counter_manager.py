@@ -33,6 +33,10 @@ class CounterManager:
         if counts[vehicle] > 0:
             counts[vehicle] -= 1
 
+    def set_count(self, vehicle, count):
+        counts = self.get_counts()
+        counts[vehicle] = max(0, count)
+
     def decrement(self, vehicle):
         counts = self.get_counts()
         if counts[vehicle] > 0:

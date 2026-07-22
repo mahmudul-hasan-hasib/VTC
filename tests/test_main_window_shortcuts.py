@@ -15,15 +15,19 @@ class MainWindowShortcutTests(unittest.TestCase):
         self.window = MainWindow()
 
     def test_counter_shortcut_increments_vehicle(self):
-        result = self.window.resolve_counter_shortcut(self._make_event("1", 0))
-        self.assertEqual(result, ("Auto Rickshaw", 1))
+        self.window._handle_counter_key(self._make_event("1", 0))
+        self.assertEqual(
+            self.window.counter.get_counts().get("Bicycle"), 1
+        )
 
     def test_counter_shortcut_decrements_vehicle_with_shift(self):
-        result = self.window.resolve_counter_shortcut(self._make_event("q", 0x02000000))
-        self.assertEqual(result, ("Large Bus", -1))
+        self.window.counter.set_count("Cart", 5)
+        self.window._handle_counter_key(self._make_event("q", 0x02000000))
+        self.assertEqual(self.window.counter.get_counts().get("Cart"), 4)
 
     def test_counter_shortcut_unknown_key_returns_none(self):
-        self.assertIsNone(self.window.resolve_counter_shortcut(self._make_event("z", 0)))
+        result = self.window._handle_counter_key(self._make_event("z", 0))
+        self.assertFalse(result)
 
     def _make_event(self, text, modifiers):
         from PyQt6.QtCore import Qt
