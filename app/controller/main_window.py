@@ -603,8 +603,8 @@ class MainWindow(QMainWindow):
             self,
             "About Vehicle Traffic Counter",
             "Vehicle Traffic Counter v1.0\n\n"
-            "A  desktop application for manual vehicle traffic counting for Regnum IT.\n\n"
-            "Powered by VLC and PyQt6.",
+            "A desktop application for manual vehicle traffic counting for Regnum IT.\n\n"
+            "Powered by VLC and PyQt6.\n\n"
             "Developed by Python team at Regnum IT.",
         )
 
